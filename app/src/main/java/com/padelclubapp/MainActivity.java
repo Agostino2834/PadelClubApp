@@ -32,9 +32,9 @@ public class MainActivity extends AppCompatActivity {
         binding.text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mDatabase = FirebaseDatabase.getInstance().getReference("users");
+                mDatabase = FirebaseDatabase.getInstance("https://padelclubapp-default-rtdb.firebaseio.com").getReference("users");
                 mDatabase.setValue("ciao");
-                Toast.makeText(MainActivity.this,"ciao", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "ciao", Toast.LENGTH_LONG).show();
             }
         });
     }
