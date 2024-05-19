@@ -7,11 +7,15 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.padelclubapp.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAnalytics mFirebaseAnalytics;
     private ActivityMainBinding binding;
+    private DatabaseReference mDatabase;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
         binding.text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mDatabase = FirebaseDatabase.getInstance().getReference("users");
+                mDatabase.setValue("ciao");
                 Toast.makeText(MainActivity.this,"ciao", Toast.LENGTH_LONG).show();
             }
         });
