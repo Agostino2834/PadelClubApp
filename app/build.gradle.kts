@@ -51,4 +51,7 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation("com.google.firebase:firebase-messaging-ktx")
     implementation("com.google.firebase:firebase-analytics-ktx")
+
+    implementation(libs.material.v121)
+
 }

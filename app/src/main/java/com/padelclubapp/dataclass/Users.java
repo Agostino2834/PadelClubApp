@@ -1,19 +1,23 @@
 package com.padelclubapp.dataclass;
 
 public class Users {
+    private String userId;
     private String nome;
     private String cognome;
     private String email;
     private String password;
-    private String confermaPassword;
     private Boolean admin;
 
-    public Users(String nome, String cognome, String email, String password, String confermaPassword, Boolean admin) {
+    public Users() {
+
+    }
+
+    public Users(String userId, String nome, String cognome, String email, String password, Boolean admin) {
+        this.userId = userId;
         this.nome = nome;
         this.cognome = cognome;
         this.email = email;
         this.password = password;
-        this.confermaPassword = confermaPassword;
         this.admin = admin;
     }
 
@@ -49,19 +53,19 @@ public class Users {
         this.password = password;
     }
 
-    public String getConfermaPassword() {
-        return confermaPassword;
-    }
-
-    public void setConfermaPassword(String confermaPassword) {
-        this.confermaPassword = confermaPassword;
-    }
-
     public Boolean getAdmin() {
         return admin;
     }
 
     public void setAdmin(Boolean admin) {
         this.admin = admin;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
