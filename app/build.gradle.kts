@@ -51,7 +51,22 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation("com.google.firebase:firebase-messaging-ktx")
     implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation("com.google.firebase:firebase-auth")
 
-    implementation(libs.material.v121)
+
+    implementation(libs.material)
+    implementation (libs.appcompat)
+
+    // navigation
+    implementation(libs.navigation.fragment)
+    implementation(libs.navigation.ui)
+    implementation(libs.navigation.dynamic.features.fragment)
+    androidTestImplementation(libs.navigation.testing)
+
+    // Jetpack Compose Integration
+    implementation(libs.navigation.compose)
+
+    //fragment
+    implementation(libs.fragment)
 
 }

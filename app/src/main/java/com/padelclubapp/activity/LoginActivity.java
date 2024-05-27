@@ -1,4 +1,4 @@
-package com.padelclubapp;
+package com.padelclubapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,18 +7,20 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.padelclubapp.databinding.ActivityLoginBinding;
-import com.padelclubapp.dataclass.Users;
 
 public class LoginActivity extends AppCompatActivity {
 
     private ActivityLoginBinding binding;
     private DatabaseReference mDatabase;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,31 +29,14 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         binding.toolbar.toolbarTitle.setText("LOG-IN");
         binding.toolbar.backIcon.setVisibility(View.GONE);
+        mAuth = FirebaseAuth.getInstance();
+
+
         mDatabase = FirebaseDatabase.getInstance("https://padelclubapp-default-rtdb.firebaseio.com").getReference("users");
         binding.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mDatabase.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                            Users user = userSnapshot.getValue(Users.class);
-
-                            if (user != null && user.getEmail().equals(binding.email.getText().toString()) && user.getPassword().equals(binding.password.getText().toString())) {
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                startActivity(intent);
-                                finish();
-                            } else {
-                                binding.errorMessage.setVisibility(View.VISIBLE);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
+                logIn(binding.email.getText().toString(),binding.password.getText().toString());
             }
         });
 
@@ -63,5 +48,23 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void logIn(String email,String password){
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            Intent intent=new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        } else {
+
+                        }
+                    }
+                });
     }
 }
