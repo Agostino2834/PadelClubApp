@@ -6,9 +6,9 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/padel_logo"
+        android:icon="@mipmap/logo_padel"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/padel_logo"
+        android:roundIcon="@mipmap/logo_padel"
         android:supportsRtl="true"
         android:theme="@style/Theme.PadelClubApp"
         tools:targetApi="31">

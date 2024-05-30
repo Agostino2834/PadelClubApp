@@ -8,25 +8,25 @@
     tools:context=".activity.MainActivity">
 
 
-
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/nav_host_fragment"
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="match_parent"
+    <FrameLayout
+        android:id="@+id/container"
         android:layout_height="0dp"
-        app:navGraph="@navigation/navigation"
-        app:defaultNavHost="true"
+        android:layout_width="match_parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_bar"
+        app:layout_constraintBottom_toTopOf="@id/bottom_bar"
         />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
+        style="@style/Widget.Design.BottomNavigationView"
         android:id="@+id/bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:itemTextColor="@color/bottom_menu_icon_color"
+        app:itemIconTint="@color/bottom_menu_icon_color"
         app:menu="@menu/bottom_nav_menu"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:labelVisibilityMode="labeled"
         />
 
 

@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.padelclubapp.R;
 
-public class homeFragment extends Fragment {
+public class HomeFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

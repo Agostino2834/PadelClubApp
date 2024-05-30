@@ -52,7 +52,7 @@ dependencies {
     implementation("com.google.firebase:firebase-messaging-ktx")
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-auth")
-
+    implementation (libs.circleimageview)
 
     implementation(libs.material)
     implementation (libs.appcompat)

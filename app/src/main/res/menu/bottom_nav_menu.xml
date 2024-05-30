@@ -5,6 +5,15 @@
         android:id="@+id/home"
         android:icon="@drawable/ic_home"
         android:title="home" />
+    <item
+        android:id="@+id/search"
+        android:icon="?android:attr/actionModeWebSearchDrawable"
+        android:title="search" />
+
+    <item
+        android:id="@+id/booking"
+        android:icon="@drawable/ic_booking"
+        android:title="prenota lezione" />
 
     <item
         android:id="@+id/account"
