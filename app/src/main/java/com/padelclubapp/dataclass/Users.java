@@ -6,19 +6,21 @@ public class Users {
     private String cognome;
     private String email;
     private String password;
-    private Boolean admin;
+    private boolean admin;
+    private boolean firstLogin;
 
     public Users() {
 
     }
 
-    public Users(String userId, String nome, String cognome, String email, String password, Boolean admin) {
+    public Users(String userId, String nome, String cognome, String email, String password, Boolean admin, boolean firstLogin) {
         this.userId = userId;
         this.nome = nome;
         this.cognome = cognome;
         this.email = email;
         this.password = password;
         this.admin = admin;
+        this.firstLogin = firstLogin;
     }
 
     public String getNome() {
@@ -67,5 +69,13 @@ public class Users {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public boolean isFirstLogin() {
+        return firstLogin;
+    }
+
+    public void setFirstLogin(boolean firstLogin) {
+        this.firstLogin = firstLogin;
     }
 }

@@ -26,6 +26,8 @@ public class RegistrationActivity extends AppCompatActivity {
     private ActivityRegistrationBinding binding;
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
+    private static final boolean isAdmin = false;
+    private static final boolean isFirstAccess = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +47,8 @@ public class RegistrationActivity extends AppCompatActivity {
                         binding.password.getText().toString(),
                         binding.confirmPassword.getText().toString())) {
 
-                    createUser(binding.email.getText().toString(),binding.password.getText().toString());
-                    deleteFields();
+                    createUser(binding.email.getText().toString(), binding.password.getText().toString());
+
 
                 } else {
                     Toast.makeText(RegistrationActivity.this, "non valido", Toast.LENGTH_LONG).show();
@@ -55,28 +57,26 @@ public class RegistrationActivity extends AppCompatActivity {
         });
     }
 
-    private void createUser(String email, String password){
+    private void createUser(String email, String password) {
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
-        }
 
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-
-                            FirebaseUser user = mAuth.getCurrentUser();
-
+                            setUser();
+                            deleteFields();
+                            Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
                         } else {
-
                         }
                     }
                 });
     }
 
-    private void setToolBar(){
+    private void setToolBar() {
         binding.toolbar.toolbarTitle.setText("REGISTRAZIONE");
         binding.toolbar.backIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,36 +88,38 @@ public class RegistrationActivity extends AppCompatActivity {
         });
     }
 
-    private void setFirebase(){
+    private void setFirebase() {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance("https://padelclubapp-default-rtdb.firebaseio.com").getReference();
     }
 
-    private void setUser(){
+    private void setUser() {
         Users user = new Users(
                 mDatabase.child("users").push().getKey(),
                 binding.nome.getText().toString(),
                 binding.cognome.getText().toString(),
                 binding.email.getText().toString(),
-                binding.password.getText().toString(), true);
+                binding.password.getText().toString(), isAdmin, isFirstAccess);
 
         mDatabase.child("users").push().setValue(user, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                 if (databaseError != null) {
+
                 } else {
                 }
             }
         });
     }
 
-    private void deleteFields(){
+    private void deleteFields() {
         binding.nome.setText("");
         binding.cognome.setText("");
         binding.email.setText("");
         binding.password.setText("");
         binding.confirmPassword.setText("");
     }
+
     private boolean checkNameSurname(String name) {
         String namePattern = "^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$";
         Pattern pattern = Pattern.compile(namePattern);

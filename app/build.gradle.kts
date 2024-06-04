@@ -42,6 +42,7 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation(libs.firebase.database)
+    implementation(libs.firebase.storage)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -52,10 +53,10 @@ dependencies {
     implementation("com.google.firebase:firebase-messaging-ktx")
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-auth")
-    implementation (libs.circleimageview)
+    implementation(libs.circleimageview)
 
     implementation(libs.material)
-    implementation (libs.appcompat)
+    implementation(libs.appcompat)
 
     // navigation
     implementation(libs.navigation.fragment)
