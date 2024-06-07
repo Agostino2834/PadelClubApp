@@ -70,4 +70,6 @@ dependencies {
     //fragment
     implementation(libs.fragment)
 
+    implementation (libs.glide)
+
 }

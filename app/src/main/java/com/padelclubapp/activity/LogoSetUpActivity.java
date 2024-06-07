@@ -1,6 +1,8 @@
 package com.padelclubapp.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
@@ -13,18 +15,27 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.padelclubapp.R;
 import com.padelclubapp.databinding.ActivityLogoSetUpBinding;
 import com.padelclubapp.dataclass.InfoApp;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class LogoSetUpActivity extends AppCompatActivity {
     private static final int PICK_IMAGE = 1;
@@ -32,29 +43,66 @@ public class LogoSetUpActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private StorageReference storageReference;
     private Uri imageUri;
+    private Dialog dialog;
+    private boolean isImageChange = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityLogoSetUpBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        mDatabase = FirebaseDatabase.getInstance("https://padelclubapp-default-rtdb.firebaseio.com").getReference();
+        storageReference = FirebaseStorage.getInstance("gs://padelclubapp.appspot.com").getReference();
+        dialog = new Dialog(LogoSetUpActivity.this);
+        setDialog();
         setUpToolbar();
+        setupUi();
         goStorage();
         saveData();
+        setContentView(binding.getRoot());
+    }
 
+    private void setupUi() {
+        mDatabase.child("infoApp").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChildren()) {
+                    InfoApp infoApp = dataSnapshot.getValue(InfoApp.class);
+                    Glide.with(LogoSetUpActivity.this)
+                            .load(infoApp.getLogo())
+                            .into(binding.logo);
+                    imageUri = Uri.parse(infoApp.getLogo());
+                    binding.nomeClub.setText(infoApp.getNome());
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        binding.cancelLogo.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("UseCompatLoadingForDrawables")
+            @Override
+            public void onClick(View view) {
+                binding.logo.setImageDrawable(getDrawable(R.drawable.logo_default));
+                isImageChange = false;
+                imageUri = null;
+            }
+        });
     }
 
     private void saveData() {
-        mDatabase = FirebaseDatabase.getInstance("https://padelclubapp-default-rtdb.firebaseio.com").getReference();
-        storageReference = FirebaseStorage.getInstance("gs://padelclubapp.appspot.com").getReference();
-
         binding.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (imageUri != null) {
-                    uploadFirebase(imageUri);
+                if (imageUri != null && !binding.nomeClub.getText().toString().isEmpty()) {
+                    if (!isImageChange) {
+                        mDatabase.child("infoApp").child("nome").setValue(binding.nomeClub.getText().toString());
+                    } else
+                        uploadFirebase(imageUri);
                 } else {
-                    Toast.makeText(LogoSetUpActivity.this, "selezionare l'immaggine", Toast.LENGTH_LONG).show();
+                    Toast.makeText(LogoSetUpActivity.this, "selezionare l'immaggine e il nome", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -72,11 +120,27 @@ public class LogoSetUpActivity extends AppCompatActivity {
                     public void onSuccess(Uri uri) {
                         InfoApp infoApp = new InfoApp(uri.toString(), binding.nomeClub.getText().toString(), 0);
                         mDatabase.child("infoApp").setValue(infoApp);
-                        Toast.makeText(LogoSetUpActivity.this, "apposto", Toast.LENGTH_LONG).show();
+                        dialog.dismiss();
                     }
                 });
             }
+        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                dialog.show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                dialog.dismiss();
+            }
         });
+    }
+
+    private void setDialog() {
+        dialog.setContentView(R.layout.dialog_progress_bar);
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.setCancelable(false);
     }
 
     private String getFileExtension(Uri uri) {
@@ -142,6 +206,7 @@ public class LogoSetUpActivity extends AppCompatActivity {
         if (requestCode == PICK_IMAGE && resultCode == RESULT_OK && data != null) {
             imageUri = data.getData();
             binding.logo.setImageURI(imageUri);
+            isImageChange = true;
         }
     }
 }
