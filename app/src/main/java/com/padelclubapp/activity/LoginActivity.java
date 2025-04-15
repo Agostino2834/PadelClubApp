@@ -1,5 +1,7 @@
 package com.padelclubapp.activity;
 
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -17,7 +19,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.padelclubapp.databinding.ActivityLoginBinding;
-import com.padelclubapp.dataclass.Users;
+import com.padelclubapp.dataclass.Utente;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -65,9 +71,9 @@ public class LoginActivity extends AppCompatActivity {
                                     Intent intent;
                                     if (isFirstAccessAdmin) {
                                         intent = new Intent(LoginActivity.this, LogoSetUpActivity.class);
-                                    } else {
+                                    } else
                                         intent = new Intent(LoginActivity.this, MainActivity.class);
-                                    }
+
                                     startActivity(intent);
                                     finish();
                                 }
@@ -84,15 +90,31 @@ public class LoginActivity extends AppCompatActivity {
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Utente utente = new Utente();
                 boolean isFirstAccess = false;
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                    Users user = userSnapshot.getValue(Users.class);
-                    if (user.getEmail().equalsIgnoreCase(email) && user.getAdmin() && user.isFirstLogin()) {
-                        isFirstAccess = true;
-                        break;
+                    Utente user = userSnapshot.getValue(Utente.class);
+                    if (user.getEmail().equalsIgnoreCase(email)) {
+                        utente = user;
+                        if (user.getAdmin() && user.isFirstLogin()) {
+                            isFirstAccess = true;
+                            break;
+                        }
                     }
                 }
-                callback.onCallback(isFirstAccess);
+                if (utente.isBandito())
+                    dialogUtenteSospeso(LoginActivity.this, true, 0L);
+                else if (utente.isSospeso()) {
+                    if (System.currentTimeMillis() < utente.getTempoSospensione())
+                        dialogUtenteSospeso(LoginActivity.this, false, utente.getTempoSospensione());
+                    else {
+                        mDatabase.child(utente.getUserId()).child("sospeso").setValue(false);
+                        mDatabase.child(utente.getUserId()).child("tempoSospensione").setValue(0);
+                        callback.onCallback(isFirstAccess);
+                    }
+                } else
+                    callback.onCallback(isFirstAccess);
+
             }
 
             @Override
@@ -105,5 +127,28 @@ public class LoginActivity extends AppCompatActivity {
 
     public interface FirstAccessCallback {
         void onCallback(boolean isFirstAccessAdmin);
+    }
+
+    private void dialogUtenteSospeso(Context context, boolean isBandito, long sospesoFino) {
+        String titolo = isBandito ? "Accesso Negato" : "Account Sospeso";
+        String messaggio;
+
+        if (isBandito) {
+            messaggio = "Il tuo account è stato bandito e non puoi più accedere all'app.";
+        } else {
+            Date dataFine = new Date(sospesoFino);
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            String dataFormattata = sdf.format(dataFine);
+            messaggio = "Il tuo account è sospeso fino al:\n" + dataFormattata;
+        }
+
+        new AlertDialog.Builder(context)
+                .setTitle(titolo)
+                .setMessage(messaggio)
+                .setCancelable(false)
+                .setPositiveButton("Esci", (dialog, which) -> {
+                    dialog.dismiss();
+                })
+                .show();
     }
 }

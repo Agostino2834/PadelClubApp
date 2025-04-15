@@ -67,12 +67,15 @@ public class LogoSetUpActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChildren()) {
                     InfoApp infoApp = dataSnapshot.getValue(InfoApp.class);
-                    Glide.with(LogoSetUpActivity.this)
-                            .load(infoApp.getLogo())
-                            .into(binding.logo);
-                    imageUri = Uri.parse(infoApp.getLogo());
                     binding.nomeClub.setText(infoApp.getNome());
-
+                    if (!infoApp.getLogo().isEmpty()) {
+                        Glide.with(LogoSetUpActivity.this)
+                                .load(infoApp.getLogo())
+                                .into(binding.logo);
+                        imageUri = Uri.parse(infoApp.getLogo());
+                        binding.cancelLogo.setVisibility(View.VISIBLE);
+                    } else
+                        binding.logo.setImageDrawable(getDrawable(R.drawable.logo_default));
                 }
             }
 
@@ -86,6 +89,7 @@ public class LogoSetUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 binding.logo.setImageDrawable(getDrawable(R.drawable.logo_default));
+                binding.cancelLogo.setVisibility(View.INVISIBLE);
                 isImageChange = false;
                 imageUri = null;
             }
@@ -101,13 +105,13 @@ public class LogoSetUpActivity extends AppCompatActivity {
                         mDatabase.child("infoApp").child("nome").setValue(binding.nomeClub.getText().toString());
                     } else
                         uploadFirebase(imageUri);
+                    Intent intent = new Intent(LogoSetUpActivity.this, GestioneCampiActivity.class);
+                    startActivity(intent);
                 } else {
                     Toast.makeText(LogoSetUpActivity.this, "selezionare l'immaggine e il nome", Toast.LENGTH_LONG).show();
                 }
             }
         });
-
-
     }
 
     private void uploadFirebase(Uri uri) {
@@ -205,7 +209,8 @@ public class LogoSetUpActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE && resultCode == RESULT_OK && data != null) {
             imageUri = data.getData();
-            binding.logo.setImageURI(imageUri);
+            Glide.with(this).load(imageUri).into(binding.logo);
+            binding.cancelLogo.setVisibility(View.VISIBLE);
             isImageChange = true;
         }
     }

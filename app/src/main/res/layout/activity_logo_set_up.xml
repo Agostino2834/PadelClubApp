@@ -38,14 +38,15 @@
         app:layout_constraintTop_toBottomOf="@id/title" />
 
 
-<ImageView
-    android:id="@+id/cancel_logo"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:src="@drawable/ic_cancel"
-    android:padding="5dp"
-    app:layout_constraintEnd_toEndOf="@id/logo"
-    app:layout_constraintTop_toTopOf="@id/logo"/>
+    <ImageView
+        android:id="@+id/cancel_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_cancel"
+        android:padding="5dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@id/logo"
+        app:layout_constraintTop_toTopOf="@id/logo" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/logo"
@@ -78,7 +79,7 @@
         android:layout_marginTop="3dp"
         android:background="@drawable/input_custom_background"
         android:hint="Nome Club"
-        android:inputType="textEmailAddress"
+        android:inputType="text"
         android:padding="10sp"
         android:paddingStart="20dp"
         android:textColor="@color/black"

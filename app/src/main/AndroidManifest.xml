@@ -23,7 +23,17 @@
         android:theme="@style/Theme.PadelClubApp"
         tools:targetApi="31">
         <activity
-            android:name=".activity.FieldsSetupActivity"
+            android:name=".activity.ModificaProfiloActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.GestioneUtenteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.DettaglioUtenteActivity"
+            android:exported="false"
+            android:theme="@style/Theme.PadelClubApp" />
+        <activity
+            android:name=".activity.GestioneCampiActivity"
             android:exported="false" />
         <activity
             android:name=".activity.LogoSetUpActivity"

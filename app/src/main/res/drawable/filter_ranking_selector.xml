@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Stato selezionato (quando cliccato) -->
+    <item android:drawable="@drawable/filter_ranking_selected" android:state_pressed="true" android:state_selected="true"/>
+    <!-- Stato non selezionato -->
+    <item android:drawable="@drawable/filter_ranking"/>
+</selector>

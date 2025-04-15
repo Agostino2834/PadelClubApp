@@ -8,7 +8,7 @@
     <item
         android:id="@+id/search"
         android:icon="?android:attr/actionModeWebSearchDrawable"
-        android:title="search" />
+        android:title="cerca utenti" />
 
     <item
         android:id="@+id/booking"
@@ -18,6 +18,6 @@
     <item
         android:id="@+id/account"
         android:icon="@drawable/ic_account"
-        android:title="account" />
+        android:title="profilo" />
 
 </menu>

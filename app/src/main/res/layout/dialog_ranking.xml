@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_dialog"
+    android:padding="24dp"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/titoloDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dai un voto!"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+
+    <LinearLayout
+        android:id="@+id/rankingStarsLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/dialogStella1"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/icon_stella_vuota"
+            android:padding="4dp" />
+
+        <ImageView
+            android:id="@+id/dialogStella2"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/icon_stella_vuota"
+            android:padding="4dp" />
+
+        <ImageView
+            android:id="@+id/dialogStella3"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/icon_stella_vuota"
+            android:padding="4dp" />
+
+        <ImageView
+            android:id="@+id/dialogStella4"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/icon_stella_vuota"
+            android:padding="4dp" />
+
+        <ImageView
+            android:id="@+id/dialogStella5"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/icon_stella_vuota"
+            android:padding="4dp" />
+
+    </LinearLayout>
+
+</LinearLayout>
