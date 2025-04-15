@@ -1,0 +1,26 @@
+<!-- res/layout/dialog_result.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="40dp"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:background="@drawable/bg_dialog"
+    android:gravity="center">
+
+    <ImageView
+        android:id="@+id/image_result"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="Icona risultato" />
+
+    <TextView
+        android:id="@+id/text_result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Messaggio"
+        android:textSize="16sp"
+        android:textAlignment="center"
+        android:textColor="#333" />
+</LinearLayout>

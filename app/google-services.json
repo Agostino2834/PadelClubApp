@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "59294410254",
+    "firebase_url": "https://padelclubapp-default-rtdb.firebaseio.com",
+    "project_id": "padelclubapp",
+    "storage_bucket": "padelclubapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:59294410254:android:e8b4edb662a193d2bebe5f",
+        "android_client_info": {
+          "package_name": "com.padelclubapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCF7F5d9l1CewHY5RWe3I5UT5TVK6hfoE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
